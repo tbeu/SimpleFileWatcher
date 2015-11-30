@@ -138,13 +138,13 @@ namespace FW
 	}
 
 	/// Starts monitoring a directory.
-	WatchStruct* CreateWatch(LPCTSTR szDirectory, bool recursive, DWORD mNotifyFilter)
+	WatchStruct* CreateWatch(LPCSTR szDirectory, bool recursive, DWORD mNotifyFilter)
 	{
 		WatchStruct* pWatch;
 		size_t ptrsize = sizeof(*pWatch);
 		pWatch = static_cast<WatchStruct*>(HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, ptrsize));
 
-		pWatch->mDirHandle = CreateFile(szDirectory, FILE_LIST_DIRECTORY,
+		pWatch->mDirHandle = CreateFileA(szDirectory, FILE_LIST_DIRECTORY,
 			FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, 
 			OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, NULL);
 
