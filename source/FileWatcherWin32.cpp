@@ -73,25 +73,29 @@ namespace FW
 			size_t offset = 0;
 			do
 			{
-				TCHAR szFile[MAX_PATH];
 				pNotify = (PFILE_NOTIFY_INFORMATION) &pWatch->mBuffer[offset];
 				offset += pNotify->NextEntryOffset;
 
-#			if defined(UNICODE)
+				int requiredSize = WideCharToMultiByte(CP_ACP, 0, pNotify->FileName,
+					pNotify->FileNameLength / sizeof(WCHAR), NULL, 0, NULL, NULL);
+				if (!requiredSize)
+					continue;
+				PCHAR szFile = new CHAR[requiredSize + 1];
+				int count = WideCharToMultiByte(CP_ACP, 0, pNotify->FileName,
+					pNotify->FileNameLength / sizeof(WCHAR),
+					szFile, requiredSize, NULL, NULL);
+				if (!count)
 				{
-					lstrcpynW(szFile, pNotify->FileName,
-						min(MAX_PATH, pNotify->FileNameLength / sizeof(WCHAR) + 1));
+					delete[] szFile;
+					continue;
 				}
-#			else
-				{
-					int count = WideCharToMultiByte(CP_ACP, 0, pNotify->FileName,
-						pNotify->FileNameLength / sizeof(WCHAR),
-						szFile, MAX_PATH - 1, NULL, NULL);
-					szFile[count] = TEXT('\0');
-				}
-#			endif
+				szFile[requiredSize] = 0;
 
 				pWatch->mFileWatcher->handleAction(pWatch, szFile, pNotify->Action);
+				if (szFile != NULL)
+				{
+					delete[] szFile;
+				}
 
 			} while (pNotify->NextEntryOffset != 0);
 		}
