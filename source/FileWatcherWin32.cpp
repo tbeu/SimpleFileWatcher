@@ -43,7 +43,7 @@ namespace FW
 	{
 		OVERLAPPED mOverlapped;
 		HANDLE mDirHandle;
-		BYTE mBuffer[32 * 1024];
+		BYTE mBuffer[4 * 1024];
 		LPARAM lParam;
 		DWORD mNotifyFilter;
 		bool mStopNow;
