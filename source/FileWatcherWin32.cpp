@@ -62,18 +62,18 @@ namespace FW
 	/// Unpacks events and passes them to a user defined callback.
 	void CALLBACK WatchCallback(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered, LPOVERLAPPED lpOverlapped)
 	{
-		TCHAR szFile[MAX_PATH];
 		PFILE_NOTIFY_INFORMATION pNotify;
 		WatchStruct* pWatch = (WatchStruct*) lpOverlapped;
-		size_t offset = 0;
 
 		if(dwNumberOfBytesTransfered == 0)
 			return;
 
 		if (dwErrorCode == ERROR_SUCCESS)
 		{
+			size_t offset = 0;
 			do
 			{
+				TCHAR szFile[MAX_PATH];
 				pNotify = (PFILE_NOTIFY_INFORMATION) &pWatch->mBuffer[offset];
 				offset += pNotify->NextEntryOffset;
 
