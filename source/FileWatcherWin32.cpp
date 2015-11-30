@@ -260,7 +260,7 @@ namespace FW
 		case FILE_ACTION_MODIFIED:
 			fwAction = Actions::Modified;
 			break;
-		};
+		}
 
 		watch->mFileWatchListener->handleFileAction(watch->mWatchid, watch->mDirName, filename, fwAction);
 	}
